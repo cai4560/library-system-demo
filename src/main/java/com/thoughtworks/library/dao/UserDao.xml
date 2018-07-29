@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtworks.library.mapper.UserMapper">
+    <select id="listAll" resultType="com.thoughtworks.library.model.User">
+        SELECT * FROM USER
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.thoughtworks.library.model.User">
+        SELECT * FROM USER WHERE ID = #{id}
+    </select>
+</mapper>

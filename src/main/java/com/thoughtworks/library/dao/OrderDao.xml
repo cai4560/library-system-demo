@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtworks.library.mapper.OrderMapper">
+    <sql id="orderSql">
+        SELECT
+        orders.ID AS order_id,
+        orders.USER_ID AS user_id,
+        orders.BOOK_ID AS book_id,
+        orders.CREATE_DATE AS order_create_date,
+        orders.RETURN_DATE AS order_return_date,
+        book.NAME AS book_name,
+        book.AUTHOR AS book_author,
+        book.IS_AVAILABLE AS book_status,
+        user.USERNAME AS user_name,
+        user.ROLE AS user_role
+        FROM ORDERS orders
+        INNER JOIN USER user ON user.ID = orders.USER_ID
+        INNER JOIN BOOK book ON book.ID = orders.BOOK_ID
+    </sql>
+
+    <resultMap id="orderResultMap" type="com.thoughtworks.library.model.Order">
+        <id property="id" column="order_id"/>
+        <result property="createDate" column="order_create_date"/>
+        <result property="returnDate" column="order_return_date"/>
+        <association property="user" javaType="com.thoughtworks.library.model.User">
+            <result property="id" column="user_id"/>
+            <result property="username" column="user_name"/>
+            <result property="role" column="user_role"/>
+        </association>
+        <association property="book" javaType="com.thoughtworks.library.model.Book">
+            <result property="id" column="book_id"/>
+            <result property="name" column="book_name"/>
+            <result property="author" column="book_author"/>
+            <result property="isAvailable" column="book_status"/>
+        </association>
+    </resultMap>
+
+    <select id="listAll" parameterType="com.thoughtworks.library.model.User" resultMap="orderResultMap">
+        <include refid="orderSql"/>
+        <if test="admin != true">
+          WHERE orders.USER_ID = #{id}
+        </if>
+    </select>
+
+    <select id="findById" resultMap="orderResultMap">
+        <include refid="orderSql"/>
+        WHERE orders.ID = #{id}
+    </select>
+
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ORDERS (USER_ID, BOOK_ID, CREATE_DATE)
+        VALUES (
+            #{userId},
+            #{bookId},
+            SYSDATE()
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM ORDERS
+        WHERE ID = #{id}
+    </delete>
+</mapper>

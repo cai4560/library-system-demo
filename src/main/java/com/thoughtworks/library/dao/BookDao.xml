@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thoughtworks.library.mapper.BookMapper">
+    <select id="listAll" resultType="com.thoughtworks.library.model.Book">
+        SELECT * FROM BOOK
+    </select>
+
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.thoughtworks.library.model.Book">
+        SELECT * FROM BOOK WHERE ID = #{id}
+    </select>
+
+    <insert id="createBooks" parameterType="com.thoughtworks.library.model.Book" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO BOOK (NAME, AUTHOR, IS_AVAILABLE)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+              #{item.name, jdbcType=VARCHAR},
+              #{item.author, jdbcType=VARCHAR},
+              1
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE BOOK
+        SET IS_AVAILABLE = #{status}
+        WHERE ID = #{bookId}
+    </update>
+</mapper>
