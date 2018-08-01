@@ -10,7 +10,7 @@ https://github.com/cai4560/library-system-demo
 
 ## Set Up
 + 启动MySQL，初始化数据的脚本在src/main/resources/migration下
-+ 在工程目录下执行./gradlew build和./gradlew bootRun
++ 在工程目录下执行gradle wrapper ./gradlew build和./gradlew bootRun
 + 访问localhost:8080即可。
 
 ## Comment
